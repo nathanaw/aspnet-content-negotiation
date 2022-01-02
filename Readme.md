@@ -21,10 +21,12 @@ See the [ContentNegotiationExample Readme](src/ContentNegotiationExample/Content
 
 # Codecs Example
 
-Coming soon.
-
 Introduce the concepts of codecs (encoders / decoders) and transcoders. These enable
 us to use the formatting and parsing logic anywhere, including in client SDKs and/or
 data persistence.
+
+See [src/CodecExample](src/CodecExample) for the solution.
+
+See the [CodecExample Readme](src/CodecExample/CodecExample/Readme.md) for details on how to run and test the endpoints.
 
 

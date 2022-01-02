@@ -49,5 +49,46 @@ namespace CodecExample.Common.Tests
 
             MediaTypeHeaderValueSupport.IsSubsetOf(leftMT, rightMT).Should().BeFalse();
         }
+
+
+        [TestMethod]
+        [DataRow("application/json", "*/*", DisplayName = "01 - Wildcard type/subtype.")]
+        [DataRow("application/json", "application/*", DisplayName = "02 - Wildcard subtype.")]
+        [DataRow("application/json", "application/json", DisplayName = "03 - Type/Subtype match.")]
+        [DataRow("application/json; Domain=foo; Version=1", "application/json; domain=foo; version=1", DisplayName = "05 - Case of params names does not matter.")]
+        [DataRow("application/json; domain=foo; version=1", "application/json; domain=foo; version=1", DisplayName = "06 - Multiple params, all match.")]
+        [DataRow("application/json; domain=foo; version=1", "application/json; domain=foo; version=1; charset=utf-8", DisplayName = "07 - Charset on right excluded from compare.")]
+        [DataRow("application/json; domain=foo; version=1; charset=utf-8", "application/json; domain=foo; version=1", DisplayName = "08 - Charset on left excluded from compare.")]
+        [DataRow("application/json; domain=foo; version=1; charset=utf-8", "application/json; domain=foo; version=1; charset=utf-16", DisplayName = "09 - Charset excluded even if values differ.")]
+        [DataRow("application/json; domain=foo; version=1; q=0.5", "application/json; domain=foo; version=1; q=0.9", DisplayName = "10 - Q excluded even if values differ.")]
+        [DataRow("application/json;    domain=foo;version=1", "application/json; domain=foo; version=1", DisplayName = "11 - Extra spaces do not matter.")]
+        [DataRow("application/entity+json; domain=foo; version=1", "application/json; domain=foo; version=1", DisplayName = "12 - Structural type on left matches non-structural on right.")]
+        [DataRow("application/entity+json; domain=foo; version=1", "application/entity+json; domain=foo; version=1", DisplayName = "13 - Structural type on both sides matches.")]
+        public void IsMatchTests(string left, string right)
+        {
+            var leftMT = MediaTypeHeaderValue.Parse(left);
+            var rightMT = MediaTypeHeaderValue.Parse(right);
+
+            MediaTypeHeaderValueSupport.IsMatch(leftMT, rightMT).Should().BeTrue();
+        }
+
+        [TestMethod]
+        [DataRow("application/json", "application/xml", DisplayName = "01 - Different subtypes")]
+        [DataRow("application/json; Domain=foo; Version=2", "application/json; domain=foo; version=1", DisplayName = "02 - Different param values.")]
+        [DataRow("application/json; Domain=foo; Version=1", "application/json; Domain=*; Version=1", DisplayName = "03 - Wildcards not supported in parameters.")]
+        [DataRow("application/json; Domain=foo; Version=1;", "application/json; Domain=BAR; Version=2", DisplayName = "04 - Trailing semicolon on left breaks parser.")]
+        [DataRow("application/json; Domain=foo; Version=1", "application/json; Domain=BAR; Version=2;", DisplayName = "05 - Trailing semicolon on right breaks parser.")]
+        [DataRow("application/json; domain=foo; version=1", "application/json; domain=FOO; version=1", DisplayName = "06 - Case of params values does matter.")]
+        [DataRow("application/*", "application/json", DisplayName = "07 - Wildcards on left are not subset.")]
+        [DataRow("application/json; domain=foo; version=1", "application/json; domain=foo; version=1; pretty=true", DisplayName = "08 - Param not on left.")]
+        [DataRow("application/json; domain=foo; version=1; pretty=true", "application/json; domain=foo; version=1", DisplayName = "09 - Param not on right.")]
+        [DataRow("application/json; domain=foo; version=1", "application/entity+json; domain=foo; version=1", DisplayName = "10 - Structural type on right but not on left.")]
+        public void IsNotMatchTests(string left, string right)
+        {
+            var leftMT = MediaTypeHeaderValue.Parse(left);
+            var rightMT = MediaTypeHeaderValue.Parse(right);
+
+            MediaTypeHeaderValueSupport.IsMatch(leftMT, rightMT).Should().BeFalse();
+        }
     }
 }

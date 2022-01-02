@@ -67,7 +67,10 @@ an exhaustive list.
 ### Curl GET requests
 
 ```bash
-# Get multi-day forecast using CUSTOM media type and formatter.
+# Get multi-day forecast using Version 1 CUSTOM media type and formatter.
+curl -i -X GET "https://localhost:5001/WeatherForecast" -H  "Accept: application/json;domain=Example.WeatherForecastCollection.Custom;version=1"
+
+# Get multi-day forecast using Version 2 CUSTOM media type and formatter.
 curl -i -X GET "https://localhost:5001/WeatherForecast" -H  "Accept: application/json;domain=Example.WeatherForecastCollection.Custom;version=1"
 
 # Get multi-day forecast using SERIALIZED media type and formatter.

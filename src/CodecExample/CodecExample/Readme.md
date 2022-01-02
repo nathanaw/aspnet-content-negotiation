@@ -1,6 +1,7 @@
-﻿# Content Negotiation Example
+﻿# Codecs Example
 
-Demonstrate how to use input and output formatters in ASP.NET for content negotiation.
+Introduces the concept of Encoders and Decoders (aka Codecs) so that we can reuse them in multiple 
+places, including the input and output formatters in ASP.NET for content negotiation.
 
 
 ## Formats
@@ -20,6 +21,23 @@ This is mostly accomplished via the Newtonsoft library's JObject.
 	{
 		"celcius": 20,
 		"farenheight": 67
+	},
+	"summary": "Yep, it is Lovely"
+}
+```
+
+### application/json; domain=Example.WeatherForecast.Custom; version=2
+
+The version 2 "Custom" format and formatters show how we can evolve the APIs
+structures over time and support both flavors on the same endpoint.
+
+```json
+{
+	"date": "2021-07-21T12:48:13.570Z",
+	"temp":
+	{
+		"c": 20,
+		"f": 67
 	},
 	"summary": "Yep, it is Lovely"
 }

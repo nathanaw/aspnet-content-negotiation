@@ -14,11 +14,11 @@ namespace CodecExample.Codecs.Serialized
 {
     public class WeatherForecastSerializedV1Encoder : BaseJsonSerializationEncoder
     {
-        public const string WeatherForecastJsonV1 = "application/json; Domain=Example.WeatherForecast.Serialized; Version=1";
+        public const string WeatherForecastJsonV1MediaType = "application/json; Domain=Example.WeatherForecast.Serialized; Version=1";
 
         public WeatherForecastSerializedV1Encoder()
         {
-            AddSupportedMediaType(WeatherForecastJsonV1);
+            AddSupportedMediaType(WeatherForecastJsonV1MediaType);
         }
 
 

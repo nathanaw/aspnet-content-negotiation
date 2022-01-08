@@ -18,6 +18,7 @@ namespace CodecExample.Common
 
         public EncoderContext()
         {
+            WriterFactory = (stream, encoding) => { return new StreamWriter(stream, encoding); };
         }
 
         /// <summary>

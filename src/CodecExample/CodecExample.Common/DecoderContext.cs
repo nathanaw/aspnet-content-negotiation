@@ -16,6 +16,7 @@ namespace CodecExample.Common
     {
         public DecoderContext()
         {
+            ReaderFactory = (stream, encoding) => { return new StreamReader(stream, encoding); };
         }
 
         /// <summary>

@@ -51,9 +51,9 @@ namespace CodecExample.Controllers
         /// </summary>
         [HttpGet]
         [Produces(
-            WeatherForecastCollectionCustomV1Encoder.WeatherForecastCollectionJsonV1,
-            WeatherForecastCollectionCustomV2Encoder.WeatherForecastCollectionJsonV2,
-            WeatherForecastCollectionSerializedV1Encoder.WeatherForecastCollectionJsonV1, 
+            WeatherForecastCollectionCustomV1Encoder.WeatherForecastCollectionJsonV1MediaType,
+            WeatherForecastCollectionCustomV2Encoder.WeatherForecastCollectionJsonV2MediaType,
+            WeatherForecastCollectionSerializedV1Encoder.WeatherForecastCollectionJsonV1MediaType, 
             Type = typeof(IEnumerable<WeatherForecast>))]
         public IActionResult Get()
         {
@@ -77,9 +77,9 @@ namespace CodecExample.Controllers
         /// </summary>
         [HttpGet("{day}")]
         [Produces(
-            WeatherForecastCustomV1Encoder.WeatherForecastJsonV1,
-            WeatherForecastCustomV2Encoder.WeatherForecastJsonV2,
-            WeatherForecastSerializedV1Encoder.WeatherForecastJsonV1, 
+            WeatherForecastCustomV1Encoder.WeatherForecastJsonV1MediaType,
+            WeatherForecastCustomV2Encoder.WeatherForecastJsonV2MediaType,
+            WeatherForecastSerializedV1Encoder.WeatherForecastJsonV1MediaType, 
             Type=typeof(WeatherForecast))]
         public IActionResult Get([FromRoute] int day)
         {
@@ -147,13 +147,13 @@ namespace CodecExample.Controllers
         /// </summary>
         [HttpPost("/[controller]")]
         [Consumes(
-            WeatherForecastCustomV1Encoder.WeatherForecastJsonV1,
-            WeatherForecastCustomV2Encoder.WeatherForecastJsonV2,
-            WeatherForecastSerializedV1Encoder.WeatherForecastJsonV1)]
+            WeatherForecastCustomV1Encoder.WeatherForecastJsonV1MediaType,
+            WeatherForecastCustomV2Encoder.WeatherForecastJsonV2MediaType,
+            WeatherForecastSerializedV1Encoder.WeatherForecastJsonV1MediaType)]
         [Produces(
-            WeatherForecastCustomV1Encoder.WeatherForecastJsonV1,
-            WeatherForecastCustomV2Encoder.WeatherForecastJsonV2,
-            WeatherForecastSerializedV1Encoder.WeatherForecastJsonV1,
+            WeatherForecastCustomV1Encoder.WeatherForecastJsonV1MediaType,
+            WeatherForecastCustomV2Encoder.WeatherForecastJsonV2MediaType,
+            WeatherForecastSerializedV1Encoder.WeatherForecastJsonV1MediaType,
             Type = typeof(WeatherForecast))]
         public IActionResult Post([FromBody] WeatherForecast forecast)
         {
@@ -178,11 +178,11 @@ namespace CodecExample.Controllers
         /// </summary>
         [HttpPost("/[controller]/ConsumesSerialized")]
         [Consumes(
-            WeatherForecastSerializedV1Encoder.WeatherForecastJsonV1)]
+            WeatherForecastSerializedV1Encoder.WeatherForecastJsonV1MediaType)]
         [Produces(
-            WeatherForecastCustomV1Encoder.WeatherForecastJsonV1,
-            WeatherForecastCustomV2Encoder.WeatherForecastJsonV2,
-            WeatherForecastSerializedV1Encoder.WeatherForecastJsonV1,
+            WeatherForecastCustomV1Encoder.WeatherForecastJsonV1MediaType,
+            WeatherForecastCustomV2Encoder.WeatherForecastJsonV2MediaType,
+            WeatherForecastSerializedV1Encoder.WeatherForecastJsonV1MediaType,
             Type = typeof(WeatherForecast))]
         public IActionResult PostConsumesSerialized([FromBody] WeatherForecast forecast)
         {
@@ -207,11 +207,11 @@ namespace CodecExample.Controllers
         /// </summary>
         [HttpPost("/[controller]/ConsumesCustom")]
         [Consumes(
-            WeatherForecastCustomV1Encoder.WeatherForecastJsonV1)]
+            WeatherForecastCustomV1Encoder.WeatherForecastJsonV1MediaType)]
         [Produces(
-            WeatherForecastCustomV1Encoder.WeatherForecastJsonV1,
-            WeatherForecastCustomV2Encoder.WeatherForecastJsonV2,
-            WeatherForecastSerializedV1Encoder.WeatherForecastJsonV1,
+            WeatherForecastCustomV1Encoder.WeatherForecastJsonV1MediaType,
+            WeatherForecastCustomV2Encoder.WeatherForecastJsonV2MediaType,
+            WeatherForecastSerializedV1Encoder.WeatherForecastJsonV1MediaType,
             Type = typeof(WeatherForecast))]
         public IActionResult PostConsumesCustom([FromBody] WeatherForecast forecast)
         {
@@ -239,9 +239,9 @@ namespace CodecExample.Controllers
         /// </summary>
         [HttpPost("/[controller]/NoConsumes")]
         [Produces(
-            WeatherForecastCustomV1Encoder.WeatherForecastJsonV1,
-            WeatherForecastCustomV2Encoder.WeatherForecastJsonV2,
-            WeatherForecastSerializedV1Encoder.WeatherForecastJsonV1,
+            WeatherForecastCustomV1Encoder.WeatherForecastJsonV1MediaType,
+            WeatherForecastCustomV2Encoder.WeatherForecastJsonV2MediaType,
+            WeatherForecastSerializedV1Encoder.WeatherForecastJsonV1MediaType,
             Type = typeof(WeatherForecast))]
         public IActionResult PostNoConsumes(WeatherForecast forecast)
         {
@@ -265,11 +265,11 @@ namespace CodecExample.Controllers
         /// </summary>
         [HttpPost("/[controller]/ConsumesCustomCollection")]
         [Consumes(
-            WeatherForecastCollectionCustomV1Encoder.WeatherForecastCollectionJsonV1)]
+            WeatherForecastCollectionCustomV1Encoder.WeatherForecastCollectionJsonV1MediaType)]
         [Produces(
-            WeatherForecastCollectionCustomV1Encoder.WeatherForecastCollectionJsonV1,
-            WeatherForecastCollectionCustomV2Encoder.WeatherForecastCollectionJsonV2,
-            WeatherForecastCollectionSerializedV1Encoder.WeatherForecastCollectionJsonV1,
+            WeatherForecastCollectionCustomV1Encoder.WeatherForecastCollectionJsonV1MediaType,
+            WeatherForecastCollectionCustomV2Encoder.WeatherForecastCollectionJsonV2MediaType,
+            WeatherForecastCollectionSerializedV1Encoder.WeatherForecastCollectionJsonV1MediaType,
             Type = typeof(IEnumerable<WeatherForecast>))]
         public IActionResult PostConsumesCustomCollection([FromBody] IEnumerable<WeatherForecast> forecasts)
         {

@@ -29,7 +29,7 @@ namespace CodecExample.Codecs.Custom
         /// </summary>
         public WeatherForecastCustomV1Decoder()
         {
-            AddSupportedMediaType(WeatherForecastCustomV1Encoder.WeatherForecastJsonV1);
+            AddSupportedMediaType(WeatherForecastCustomV1Encoder.WeatherForecastJsonV1MediaType);
         }
 
         public override bool CanReadType(Type type)

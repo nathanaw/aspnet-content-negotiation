@@ -26,7 +26,7 @@ namespace CodecExample.Codecs.Serialized
         /// </summary>
         public WeatherForecastCollectionSerializedV1Decoder()
         {
-            AddSupportedMediaType(WeatherForecastCollectionSerializedV1Encoder.WeatherForecastCollectionJsonV1);
+            AddSupportedMediaType(WeatherForecastCollectionSerializedV1Encoder.WeatherForecastCollectionJsonV1MediaType);
         }
 
         public override bool CanReadType(Type type)

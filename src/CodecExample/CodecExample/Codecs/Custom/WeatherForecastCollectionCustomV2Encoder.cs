@@ -17,11 +17,11 @@ namespace CodecExample.Codecs.Custom
 {
     public class WeatherForecastCollectionCustomV2Encoder : BaseNewtonsoftJsonEncoder
     {
-        public const string WeatherForecastCollectionJsonV2 = "application/json; Domain=Example.WeatherForecastCollection.Custom; Version=2";
+        public const string WeatherForecastCollectionJsonV2MediaType = "application/json; Domain=Example.WeatherForecastCollection.Custom; Version=2";
 
         public WeatherForecastCollectionCustomV2Encoder()
         {
-            AddSupportedMediaType(WeatherForecastCollectionJsonV2);
+            AddSupportedMediaType(WeatherForecastCollectionJsonV2MediaType);
         }
 
         protected override bool CanWriteType(Type type)

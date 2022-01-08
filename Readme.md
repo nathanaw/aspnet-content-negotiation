@@ -27,6 +27,8 @@ data persistence.
 
 See [src/CodecExample](src/CodecExample) for the solution.
 
-See the [CodecExample Readme](src/CodecExample/CodecExample/Readme.md) for details on how to run and test the endpoints.
+See the [CodecExample Server Readme](src/CodecExample/CodecExample/Readme.md) for details on how to run and test the server endpoints.
+
+See the [CodecExample Client Readme](src/CodecExample/CodecExample.Client/README.md) for an example of using the transcoder and codecs on the client.
 
 

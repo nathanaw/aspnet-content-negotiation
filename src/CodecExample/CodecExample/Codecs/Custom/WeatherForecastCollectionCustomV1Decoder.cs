@@ -35,7 +35,7 @@ namespace CodecExample.Codecs.Custom
 
         public override bool CanReadType(Type type)
         {
-            return type.IsAssignableFrom(typeof(IEnumerable<WeatherForecast>));
+            return type.IsAssignableFrom(typeof(List<WeatherForecast>));
         }
 
         public override object DecodeFromJToken(JToken jObject, DecoderContext context)

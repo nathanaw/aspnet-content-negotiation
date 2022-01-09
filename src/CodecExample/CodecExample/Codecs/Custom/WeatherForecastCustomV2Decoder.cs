@@ -59,7 +59,8 @@ namespace CodecExample.Codecs.Custom
                                             "yyyy-MM-ddTHH:mm:ss.fZ",
                                             "yyyy-MM-ddTHH:mm:ssZ",
                                         },
-                                        CultureInfo.InvariantCulture);
+                                        CultureInfo.InvariantCulture,
+                                        DateTimeStyles.AdjustToUniversal);
 
             var tempNode = jObject["temp"];
             if (tempNode is null) throw new FormatException("WeatherForcast is missing the 'temp' node.");

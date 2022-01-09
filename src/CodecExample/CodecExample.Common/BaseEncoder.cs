@@ -106,7 +106,7 @@ namespace CodecExample.Common
                 throw new InvalidOperationException($"Encoder '{this.GetType().Name}' does not support any media types. It must support at least one media type.");
             }
 
-            if (!CanWriteType(context.ObjectType))
+            if (context.ObjectType is not null && !CanWriteType(context.ObjectType))
             {
                 return false;
             }

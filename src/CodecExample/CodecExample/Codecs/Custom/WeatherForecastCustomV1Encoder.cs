@@ -43,7 +43,9 @@ namespace CodecExample.Codecs.Custom
             temperatureNode["celcius"] = forecast.TemperatureC;
             temperatureNode["farenheight"] = forecast.TemperatureF;
 
-            jobject["summary"] = forecast.Summary;
+            if (forecast.Summary is not null)
+                jobject["summary"] = forecast.Summary;
+
             return jobject;
         }
     }

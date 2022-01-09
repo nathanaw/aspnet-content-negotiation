@@ -40,7 +40,7 @@ namespace CodecExample.Common
                 throw new InvalidOperationException($"Decoder '{this.GetType().Name}' does not support any media types. It must support at least one media type.");
             }
 
-            if (!CanReadType(context.ModelType))
+            if (context.ModelType is not null && !CanReadType(context.ModelType))
             {
                 return false;
             }

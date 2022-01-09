@@ -1,0 +1,32 @@
+﻿[
+  {
+    "Date": "2021-07-21T12:48:13.57Z",
+    "TemperatureC": 0,
+    "TemperatureF": 32,
+    "Summary": "Sunshine all day"
+  },
+  {
+    "Date": "2021-07-21T12:48:13.57Z",
+    "TemperatureC": 100,
+    "TemperatureF": 211,
+    "Summary": "Boiling"
+  },
+  {
+    "Date": "2021-07-21T12:48:13.57Z",
+    "TemperatureC": 20,
+    "TemperatureF": 67,
+    "Summary": "Thunderstomes in afternoon"
+  },
+  {
+    "Date": "2021-07-21T12:48:13.57Z",
+    "TemperatureC": 25,
+    "TemperatureF": 76,
+    "Summary": "Cloudy"
+  },
+  {
+    "Date": "2021-07-21T12:48:13.57Z",
+    "TemperatureC": 30,
+    "TemperatureF": 85,
+    "Summary": "Clear skies"
+  }
+]

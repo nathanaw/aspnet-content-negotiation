@@ -51,7 +51,8 @@ namespace CodecExample.Codecs.Custom
                                             "yyyy-MM-ddTHH:mm:ss.fZ",
                                             "yyyy-MM-ddTHH:mm:ssZ",
                                         },
-                                        CultureInfo.InvariantCulture);
+                                        CultureInfo.InvariantCulture,
+                                        DateTimeStyles.AdjustToUniversal);
 
             var tempNode = jObject["temperature"];
             if (tempNode is not null)

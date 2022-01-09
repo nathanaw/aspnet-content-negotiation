@@ -31,7 +31,7 @@ namespace CodecExample.Codecs.Serialized
 
         public override bool CanReadType(Type type)
         {
-            return type.IsAssignableFrom(typeof(IEnumerable<WeatherForecast>));
+            return type.IsAssignableFrom(typeof(List<WeatherForecast>));
         }
 
     }

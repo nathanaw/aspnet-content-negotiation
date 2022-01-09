@@ -21,6 +21,8 @@ namespace CodecExample.Common
         {
             var serializerOptions = new JsonSerializerOptions();
             serializerOptions.WriteIndented = true;
+            serializerOptions.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull;
+
 
             await JsonSerializer.SerializeAsync(context.OutputStream, context.Object, context.ObjectType, serializerOptions);
             await context.OutputStream.FlushAsync();

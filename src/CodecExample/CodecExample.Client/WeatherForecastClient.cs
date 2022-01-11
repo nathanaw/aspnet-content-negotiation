@@ -63,10 +63,7 @@ namespace CodecExample.Client
                                     .WithHeader("Accept", WeatherForecastCollectionCustomV1Encoder.WeatherForecastCollectionJsonV1MediaType)
                                     .GetAsync();
 
-            DecoderContext decoderContext = await GetContext<IEnumerable<WeatherForecast>>(response);
-
-            var responseObject = await Transcoder.ReadAsync(decoderContext);
-            return (IEnumerable<WeatherForecast>)responseObject;
+            return await DecodeResponse<IEnumerable<WeatherForecast>>(response);
         }
 
         /// <summary>
@@ -82,10 +79,7 @@ namespace CodecExample.Client
                                     .WithHeader("Accept", WeatherForecastCollectionCustomV2Encoder.WeatherForecastCollectionJsonV2MediaType)
                                     .GetAsync();
 
-            DecoderContext decoderContext = await GetContext<IEnumerable<WeatherForecast>>(response);
-
-            var responseObject = await Transcoder.ReadAsync(decoderContext);
-            return (IEnumerable<WeatherForecast>)responseObject;
+            return await DecodeResponse<IEnumerable<WeatherForecast>>(response);
         }
 
         /// <summary>
@@ -101,10 +95,7 @@ namespace CodecExample.Client
                                     .WithHeader("Accept", WeatherForecastCollectionSerializedV1Encoder.WeatherForecastCollectionJsonV1MediaType)
                                     .GetAsync();
 
-            DecoderContext decoderContext = await GetContext<IEnumerable<WeatherForecast>>(response);
-
-            var responseObject = await Transcoder.ReadAsync(decoderContext);
-            return (IEnumerable<WeatherForecast>)responseObject;
+            return await DecodeResponse<IEnumerable<WeatherForecast>>(response);
         }
 
 
@@ -134,10 +125,7 @@ namespace CodecExample.Client
                                     .WithHeader("Accept", acceptedMediaTypes)
                                     .GetAsync();
 
-            DecoderContext decoderContext = await GetContext<IEnumerable<WeatherForecast>>(response);
-
-            var responseObject = await Transcoder.ReadAsync(decoderContext);
-            return (IEnumerable<WeatherForecast>)responseObject;
+            return await DecodeResponse<IEnumerable<WeatherForecast>>(response);
         }
 
 
@@ -149,9 +137,7 @@ namespace CodecExample.Client
         ///     application/json; Domain=Example.WeatherForecast.Custom; Version=1
         /// 
         /// Accepts: 
-        ///     application/json; Domain=Example.WeatherForecast.Custom; Version=1;     q=0.900
-        ///     application/json; Domain=Example.WeatherForecast.Custom; Version=2;     q=0.500
-        ///     application/json; Domain=Example.WeatherForecast.Serialized; Version=1; q=0.100 
+        ///     application/json; Domain=Example.WeatherForecast.Custom; Version=2;
         /// </summary>
         public async Task<WeatherForecast> PostForecastV1Custom(WeatherForecast forecast)
         {
@@ -167,10 +153,7 @@ namespace CodecExample.Client
                                     .PostAsync(httpPostContent);
 
             // Decode the response.
-            DecoderContext decoderContext = await GetContext<WeatherForecast>(response);
-
-            var responseObject = await Transcoder.ReadAsync(decoderContext);
-            return (WeatherForecast)responseObject;
+            return await DecodeResponse<WeatherForecast>(response);
         }
 
 
@@ -183,9 +166,7 @@ namespace CodecExample.Client
         ///     application/json; Domain=Example.WeatherForecastCollection.Custom; Version=1
         /// 
         /// Accepts: 
-        ///     application/json; Domain=Example.WeatherForecastCollection.Custom; Version=1;     q=0.900
-        ///     application/json; Domain=Example.WeatherForecastCollection.Custom; Version=2;     q=0.500
-        ///     application/json; Domain=Example.WeatherForecastCollection.Serialized; Version=1; q=0.100 
+        ///     application/json; Domain=Example.WeatherForecastCollection.Custom; Version=2;
         /// </summary>
         public async Task<IEnumerable<WeatherForecast>> PostForecastV1Custom(IEnumerable<WeatherForecast> forecasts)
         {
@@ -201,10 +182,7 @@ namespace CodecExample.Client
                                     .PostAsync(httpPostContent);
 
             // Decode the response.
-            DecoderContext decoderContext = await GetContext<IEnumerable<WeatherForecast>>(response);
-
-            var responseObject = await Transcoder.ReadAsync(decoderContext);
-            return (IEnumerable<WeatherForecast>)responseObject;
+            return await DecodeResponse<IEnumerable<WeatherForecast>>(response);
         }
 
 
@@ -224,21 +202,18 @@ namespace CodecExample.Client
                                     .WithHeader("Accept", "application/json; Domain=foo; Version=9999")
                                     .GetAsync();
 
-            DecoderContext decoderContext = await GetContext<IEnumerable<WeatherForecast>>(response);
-
-            var responseObject = await Transcoder.ReadAsync(decoderContext);
-            return (IEnumerable<WeatherForecast>)responseObject;
+            return await DecodeResponse<IEnumerable<WeatherForecast>>(response);
         }
 
 
         /// <summary>
-        /// Lifts the relevant pieces of the FlurlResponse into a DecoderContext
-        /// so that the Transcoder can decode the response.
+        /// Decodes the response representation into the specified resource type
+        /// using the content type header to select the proper codec.
         /// </summary>
-        /// <typeparam name="T">The type of the response to be put in the DecoderContext.ModelType.</typeparam>
+        /// <typeparam name="T">The type of resource to return.</typeparam>
         /// <param name="response">The IFlurlResponse to be parsed.</param>
-        /// <returns>A DecoderContext for use by Transcoder.ReadAsync()</returns>
-        private static async Task<DecoderContext> GetContext<T>(IFlurlResponse response)
+        /// <returns>The resource decoded by the transcoder and codecs.</returns>
+        private async Task<T> DecodeResponse<T>(IFlurlResponse response)
         {
             // Throw exception if not successfull
             response.ResponseMessage.EnsureSuccessStatusCode();
@@ -268,7 +243,9 @@ namespace CodecExample.Client
                 ModelType = typeof(T)
             };
 
-            return decoderContext;
+            var responseObject = await Transcoder.ReadAsync(decoderContext);
+
+            return (T)responseObject;
         }
 
         /// <summary>

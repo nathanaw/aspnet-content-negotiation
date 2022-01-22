@@ -1,0 +1,42 @@
+[
+  {
+    "date": "2021-07-21T12:48:13.570Z",
+    "temperature": {
+      "celcius": 0,
+      "farenheight": 32
+    },
+    "summary": "Sunshine all day"
+  },
+  {
+    "date": "2021-07-22T12:48:13.570Z",
+    "temperature": {
+      "celcius": 100,
+      "farenheight": 211
+    },
+    "summary": "Boiling"
+  },
+  {
+    "date": "2021-07-23T12:48:13.570Z",
+    "temperature": {
+      "celcius": 20,
+      "farenheight": 67
+    },
+    "summary": "Thunderstoms in afternoon"
+  },
+  {
+    "date": "2021-07-24T12:48:13.570Z",
+    "temperature": {
+      "celcius": 25,
+      "farenheight": 76
+    },
+    "summary": "Cloudy"
+  },
+  {
+    "date": "2021-07-25T12:48:13.570Z",
+    "temperature": {
+      "celcius": 30,
+      "farenheight": 85
+    },
+    "summary": "Clear skies"
+  }
+]

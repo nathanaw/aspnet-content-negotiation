@@ -22,7 +22,7 @@ This is mostly accomplished via the Newtonsoft library's JObject.
 		"celcius": 20,
 		"farenheight": 67
 	},
-	"summary": "Yep, it is Lovely"
+	"summary": "Lovely"
 }
 ```
 
@@ -39,7 +39,7 @@ structures over time and support both flavors on the same endpoint.
 		"c": 20,
 		"f": 67
 	},
-	"summary": "Yep, it is Lovely"
+	"summary": "Lovely"
 }
 ```
 
@@ -54,7 +54,7 @@ the values by naming conventions.
 	"Date": "2021-07-21T12:48:13.57Z",
 	"TemperatureC": 20,
 	"TemperatureF": 67,
-	"Summary": "Yep, it is Lovely"
+	"Summary": "Lovely"
 }
 ```
 
@@ -106,6 +106,13 @@ curl -i -X GET "https://localhost:5001/WeatherForecast/ProducesType/3" -H "Accep
 curl -i -X POST "https://localhost:5001/WeatherForecast/" \
   -H  "Accept: application/json; domain=Example.WeatherForecast.Custom; version=1" \
   -H  "Content-Type: application/json; domain=Example.WeatherForecast.Serialized; version=1" \
-  -d "{\"date\":\"2021-07-21T12:48:13.570Z\", \"temperatureC\":20, \"summary\":\"Lovely\" }"
+  -d "{\"Date\":\"2021-07-21T12:48:13.570Z\", \"TemperatureC\":20, \"Summary\":\"Lovely\" }"
 ```
 
+```bash
+# POST a collection of forecasts.
+curl -i -X POST "https://localhost:5001/WeatherForecast/ConsumesCustomCollection/" \
+  -H  "Accept: application/json; domain=Example.WeatherForecastCollection.Custom; version=1" \
+  -H  "Content-Type: application/json; domain=Example.WeatherForecastCollection.Serialized; version=1" \
+  -d "[{\"Date\":\"2021-07-21T12:48:13.570Z\", \"TemperatureC\":20, \"Summary\":\"Lovely\" }, {\"Date\":\"2021-07-22T12:48:13.570Z\", \"TemperatureC\":30, \"Summary\":\"Hot\" }]"
+```

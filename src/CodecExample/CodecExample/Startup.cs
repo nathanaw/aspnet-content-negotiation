@@ -63,6 +63,7 @@ namespace CodecExample
 
             services.AddSingleton<Transcoder>(transcoder);
 
+            services.AddSingleton<Repositories.WeatherForecastsRepository>();
 
             services.AddControllers(options =>
             {

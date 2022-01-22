@@ -3,15 +3,12 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using System.Linq;
 using CodecExample.Codecs.Custom;
 using CodecExample.Codecs.Serialized;
-using Microsoft.AspNetCore.Http;
+using CodecExample.Repositories;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Extensions.Logging;
 
 namespace CodecExample.Controllers
@@ -27,11 +24,15 @@ namespace CodecExample.Controllers
 
 
         private readonly ILogger<WeatherForecastController> _logger;
+        private readonly WeatherForecastsRepository _repository;
 
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
+        public WeatherForecastController(
+                    ILogger<WeatherForecastController> logger
+                    , WeatherForecastsRepository weatherForecastsRepository)
         {
             _logger = logger;
+            _repository = weatherForecastsRepository;
         }
 
 
@@ -53,11 +54,11 @@ namespace CodecExample.Controllers
         [Produces(
             WeatherForecastCollectionCustomV1Encoder.WeatherForecastCollectionJsonV1MediaType,
             WeatherForecastCollectionCustomV2Encoder.WeatherForecastCollectionJsonV2MediaType,
-            WeatherForecastCollectionSerializedV1Encoder.WeatherForecastCollectionJsonV1MediaType, 
+            WeatherForecastCollectionSerializedV1Encoder.WeatherForecastCollectionJsonV1MediaType,
             Type = typeof(IEnumerable<WeatherForecast>))]
-        public IActionResult Get()
+        public async Task<IActionResult> Get()
         {
-            return Ok(GetMultidayForecast());
+            return Ok(await _repository.FindAll());
         }
 
 
@@ -79,11 +80,11 @@ namespace CodecExample.Controllers
         [Produces(
             WeatherForecastCustomV1Encoder.WeatherForecastJsonV1MediaType,
             WeatherForecastCustomV2Encoder.WeatherForecastJsonV2MediaType,
-            WeatherForecastSerializedV1Encoder.WeatherForecastJsonV1MediaType, 
-            Type=typeof(WeatherForecast))]
-        public IActionResult Get([FromRoute] int day)
+            WeatherForecastSerializedV1Encoder.WeatherForecastJsonV1MediaType,
+            Type = typeof(WeatherForecast))]
+        public async Task<IActionResult> Get([FromRoute] int day)
         {
-            return Ok(GetSingleDayForecast(day));
+            return Ok(await _repository.Find(day));
         }
 
 
@@ -102,9 +103,9 @@ namespace CodecExample.Controllers
         /// 
         /// </summary>
         [HttpGet("/[controller]/NoProduces/{day}")]
-        public IActionResult GetNoProduces([FromRoute] int day)
+        public async Task<IActionResult> GetNoProduces([FromRoute] int day)
         {
-            return Ok(GetSingleDayForecast(day));
+            return Ok(await _repository.Find(day));
         }
 
 
@@ -124,9 +125,9 @@ namespace CodecExample.Controllers
         /// </summary>
         [HttpGet("/[controller]/ProducesType/{day}")]
         [Produces(typeof(WeatherForecast))]
-        public IActionResult GetProducesType([FromRoute] int day)
+        public async Task<IActionResult> GetProducesType([FromRoute] int day)
         {
-            return Ok(GetSingleDayForecast(day));
+            return Ok(await _repository.Find(day));
         }
 
 
@@ -155,9 +156,9 @@ namespace CodecExample.Controllers
             WeatherForecastCustomV2Encoder.WeatherForecastJsonV2MediaType,
             WeatherForecastSerializedV1Encoder.WeatherForecastJsonV1MediaType,
             Type = typeof(WeatherForecast))]
-        public IActionResult Post([FromBody] WeatherForecast forecast)
+        public async Task<IActionResult> Post([FromBody] WeatherForecast forecast)
         {
-            return Ok(ProcessForecast(forecast));
+            return Ok(await _repository.Save(forecast));
         }
 
 
@@ -184,9 +185,9 @@ namespace CodecExample.Controllers
             WeatherForecastCustomV2Encoder.WeatherForecastJsonV2MediaType,
             WeatherForecastSerializedV1Encoder.WeatherForecastJsonV1MediaType,
             Type = typeof(WeatherForecast))]
-        public IActionResult PostConsumesSerialized([FromBody] WeatherForecast forecast)
+        public async Task<IActionResult> PostConsumesSerialized([FromBody] WeatherForecast forecast)
         {
-            return Ok(ProcessForecast(forecast));
+            return Ok(await _repository.Save(forecast));
         }
 
 
@@ -213,9 +214,9 @@ namespace CodecExample.Controllers
             WeatherForecastCustomV2Encoder.WeatherForecastJsonV2MediaType,
             WeatherForecastSerializedV1Encoder.WeatherForecastJsonV1MediaType,
             Type = typeof(WeatherForecast))]
-        public IActionResult PostConsumesCustom([FromBody] WeatherForecast forecast)
+        public async Task<IActionResult> PostConsumesCustom([FromBody] WeatherForecast forecast)
         {
-            return Ok(ProcessForecast(forecast));
+            return Ok(await _repository.Save(forecast));
         }
 
 
@@ -243,9 +244,9 @@ namespace CodecExample.Controllers
             WeatherForecastCustomV2Encoder.WeatherForecastJsonV2MediaType,
             WeatherForecastSerializedV1Encoder.WeatherForecastJsonV1MediaType,
             Type = typeof(WeatherForecast))]
-        public IActionResult PostNoConsumes(WeatherForecast forecast)
+        public async Task<IActionResult> PostNoConsumes(WeatherForecast forecast)
         {
-            return Ok(ProcessForecast(forecast));
+            return Ok(await _repository.Save(forecast));
         }
 
         /// <summary>
@@ -271,40 +272,13 @@ namespace CodecExample.Controllers
             WeatherForecastCollectionCustomV2Encoder.WeatherForecastCollectionJsonV2MediaType,
             WeatherForecastCollectionSerializedV1Encoder.WeatherForecastCollectionJsonV1MediaType,
             Type = typeof(IEnumerable<WeatherForecast>))]
-        public IActionResult PostConsumesCustomCollection([FromBody] IEnumerable<WeatherForecast> forecasts)
+        public async Task<IActionResult> PostConsumesCustomCollection([FromBody] IEnumerable<WeatherForecast> forecasts)
         {
-            return Ok(ProcessMultipleForecasts(forecasts));
+            return Ok(await _repository.SaveAll(forecasts));
         }
 
 
 
-
-        private IEnumerable<WeatherForecast> GetMultidayForecast()
-        {
-            var rng = new Random();
-            var forecasts = Enumerable.Range(1, 5).Select(index => new WeatherForecast
-            {
-                Date = DateTime.Now.AddDays(index),
-                TemperatureC = rng.Next(-20, 55),
-                Summary = Summaries[rng.Next(Summaries.Length)]
-            })
-            .ToArray();
-
-            return forecasts;
-        }
-
-        private WeatherForecast GetSingleDayForecast(int day)
-        {
-            var rng = new Random();
-            var forecast = new WeatherForecast
-            {
-                Date = DateTime.Now.AddDays(day),
-                TemperatureC = rng.Next(-20, 55),
-                Summary = Summaries[rng.Next(Summaries.Length)]
-            };
-
-            return forecast;
-        }
 
         private WeatherForecast ProcessForecast(WeatherForecast forecast)
         {

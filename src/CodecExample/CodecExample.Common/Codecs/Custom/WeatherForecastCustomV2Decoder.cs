@@ -17,7 +17,7 @@ using Microsoft.Net.Http.Headers;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace CodecExample.Codecs.Custom
+namespace CodecExample.Common.Codecs.Custom
 {
     /// <summary>
     /// A <see cref="TextInputFormatter"/> for JSON content that uses <see cref="JsonSerializer"/>.

@@ -10,7 +10,7 @@ using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace CodecExample.Codecs.Serialized
+namespace CodecExample.Common.Codecs.Serialized
 {
     public class WeatherForecastCollectionSerializedV1Encoder : BaseJsonSerializationEncoder
     {

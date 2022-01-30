@@ -13,15 +13,15 @@ using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace CodecExample.Codecs.Custom
+namespace CodecExample.Common.Codecs.Custom
 {
-    public class WeatherForecastCollectionCustomV2Encoder : BaseNewtonsoftJsonEncoder
+    public class WeatherForecastCollectionCustomV1Encoder : BaseNewtonsoftJsonEncoder
     {
-        public const string WeatherForecastCollectionJsonV2MediaType = "application/json; Domain=Example.WeatherForecastCollection.Custom; Version=2";
+        public const string WeatherForecastCollectionJsonV1MediaType = "application/json; Domain=Example.WeatherForecastCollection.Custom; Version=1";
 
-        public WeatherForecastCollectionCustomV2Encoder()
+        public WeatherForecastCollectionCustomV1Encoder()
         {
-            AddSupportedMediaType(WeatherForecastCollectionJsonV2MediaType);
+            AddSupportedMediaType(WeatherForecastCollectionJsonV1MediaType);
         }
 
         protected override bool CanWriteType(Type type)
@@ -37,7 +37,7 @@ namespace CodecExample.Codecs.Custom
             // Use the encoding logic of the singular item encoder.
             // TODO - Fetch the item encoder from transcoder.
             // --------------------------------------------------------------------------------
-            var itemEncoder = new WeatherForecastCustomV2Encoder();
+            var itemEncoder = new WeatherForecastCustomV1Encoder();
 
             JArray jarray = new JArray();
 

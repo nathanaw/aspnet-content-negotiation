@@ -5,11 +5,13 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
-using CodecExample.Codecs.Custom;
-using CodecExample.Codecs.Serialized;
-using CodecExample.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using CodecExample.Common;
+using CodecExample.Common.Codecs.Custom;
+using CodecExample.Common.Codecs.Serialized;
+using CodecExample.Data.Sqlite;
+using CodecExample.Common.Protobuf.Codecs;
 
 namespace CodecExample.Controllers
 {
@@ -55,10 +57,11 @@ namespace CodecExample.Controllers
             WeatherForecastCollectionCustomV1Encoder.WeatherForecastCollectionJsonV1MediaType,
             WeatherForecastCollectionCustomV2Encoder.WeatherForecastCollectionJsonV2MediaType,
             WeatherForecastCollectionSerializedV1Encoder.WeatherForecastCollectionJsonV1MediaType,
+            WeatherForecastCollectionV1Encoder.MediaType,
             Type = typeof(IEnumerable<WeatherForecast>))]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> Get([FromQuery] int? minTempC, [FromQuery] int? maxTempC)
         {
-            return Ok(await _repository.FindAll());
+            return Ok(await _repository.FindAll(minTempC, maxTempC));
         }
 
 
@@ -81,10 +84,18 @@ namespace CodecExample.Controllers
             WeatherForecastCustomV1Encoder.WeatherForecastJsonV1MediaType,
             WeatherForecastCustomV2Encoder.WeatherForecastJsonV2MediaType,
             WeatherForecastSerializedV1Encoder.WeatherForecastJsonV1MediaType,
+            WeatherForecastV1Encoder.MediaType,
             Type = typeof(WeatherForecast))]
         public async Task<IActionResult> Get([FromRoute] int day)
         {
-            return Ok(await _repository.Find(day));
+            var forecast = await _repository.Find(day);
+
+            if (forecast is null)
+            {
+                return NotFound();
+            }
+
+            return Ok(forecast);
         }
 
 
@@ -105,7 +116,14 @@ namespace CodecExample.Controllers
         [HttpGet("/[controller]/NoProduces/{day}")]
         public async Task<IActionResult> GetNoProduces([FromRoute] int day)
         {
-            return Ok(await _repository.Find(day));
+            var forecast = await _repository.Find(day);
+
+            if (forecast is null)
+            {
+                return NotFound();
+            }
+
+            return Ok(forecast);
         }
 
 
@@ -127,7 +145,14 @@ namespace CodecExample.Controllers
         [Produces(typeof(WeatherForecast))]
         public async Task<IActionResult> GetProducesType([FromRoute] int day)
         {
-            return Ok(await _repository.Find(day));
+            var forecast = await _repository.Find(day);
+
+            if (forecast is null)
+            {
+                return NotFound();
+            }
+
+            return Ok(forecast);
         }
 
 
@@ -150,11 +175,13 @@ namespace CodecExample.Controllers
         [Consumes(
             WeatherForecastCustomV1Encoder.WeatherForecastJsonV1MediaType,
             WeatherForecastCustomV2Encoder.WeatherForecastJsonV2MediaType,
-            WeatherForecastSerializedV1Encoder.WeatherForecastJsonV1MediaType)]
+            WeatherForecastSerializedV1Encoder.WeatherForecastJsonV1MediaType,
+            WeatherForecastV1Encoder.MediaType)]
         [Produces(
             WeatherForecastCustomV1Encoder.WeatherForecastJsonV1MediaType,
             WeatherForecastCustomV2Encoder.WeatherForecastJsonV2MediaType,
             WeatherForecastSerializedV1Encoder.WeatherForecastJsonV1MediaType,
+            WeatherForecastV1Encoder.MediaType,
             Type = typeof(WeatherForecast))]
         public async Task<IActionResult> Post([FromBody] WeatherForecast forecast)
         {
@@ -184,6 +211,7 @@ namespace CodecExample.Controllers
             WeatherForecastCustomV1Encoder.WeatherForecastJsonV1MediaType,
             WeatherForecastCustomV2Encoder.WeatherForecastJsonV2MediaType,
             WeatherForecastSerializedV1Encoder.WeatherForecastJsonV1MediaType,
+            WeatherForecastV1Encoder.MediaType,
             Type = typeof(WeatherForecast))]
         public async Task<IActionResult> PostConsumesSerialized([FromBody] WeatherForecast forecast)
         {
@@ -213,6 +241,7 @@ namespace CodecExample.Controllers
             WeatherForecastCustomV1Encoder.WeatherForecastJsonV1MediaType,
             WeatherForecastCustomV2Encoder.WeatherForecastJsonV2MediaType,
             WeatherForecastSerializedV1Encoder.WeatherForecastJsonV1MediaType,
+            WeatherForecastV1Encoder.MediaType,
             Type = typeof(WeatherForecast))]
         public async Task<IActionResult> PostConsumesCustom([FromBody] WeatherForecast forecast)
         {
@@ -243,6 +272,7 @@ namespace CodecExample.Controllers
             WeatherForecastCustomV1Encoder.WeatherForecastJsonV1MediaType,
             WeatherForecastCustomV2Encoder.WeatherForecastJsonV2MediaType,
             WeatherForecastSerializedV1Encoder.WeatherForecastJsonV1MediaType,
+            WeatherForecastV1Encoder.MediaType,
             Type = typeof(WeatherForecast))]
         public async Task<IActionResult> PostNoConsumes(WeatherForecast forecast)
         {
@@ -271,6 +301,7 @@ namespace CodecExample.Controllers
             WeatherForecastCollectionCustomV1Encoder.WeatherForecastCollectionJsonV1MediaType,
             WeatherForecastCollectionCustomV2Encoder.WeatherForecastCollectionJsonV2MediaType,
             WeatherForecastCollectionSerializedV1Encoder.WeatherForecastCollectionJsonV1MediaType,
+            WeatherForecastCollectionV1Encoder.MediaType,
             Type = typeof(IEnumerable<WeatherForecast>))]
         public async Task<IActionResult> PostConsumesCustomCollection([FromBody] IEnumerable<WeatherForecast> forecasts)
         {

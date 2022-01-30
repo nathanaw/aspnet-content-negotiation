@@ -3,6 +3,37 @@
 Introduces the concept of Encoders and Decoders (aka Codecs) so that we can reuse them in multiple 
 places, including the input and output formatters in ASP.NET for content negotiation.
 
+## Running the sample
+
+### IDE
+
+To run the sample:
+1. Start the server by running the CodecExample project.
+2. Start the client by running the CodecExample.Client project.
+3. Run the below curl commands in a command prompt to observe output directly.
+
+
+### Command Line
+
+From the root of the CodecExample solution directory:
+
+```bash
+dotnet build
+
+# Start the server
+dotnet run --project CodecExample/CodecExample.csproj
+
+# Start the client (separate command prompt)
+# This will create/update records in the database
+dotnet run --project CodecExample.Client/CodecExample.Client.csproj
+
+# Get multi-day forecast using Version 1 CUSTOM media type and formatter.
+curl -i -X GET "https://localhost:5001/WeatherForecast" -H  "Accept: application/json;domain=Example.WeatherForecastCollection.Custom;version=1"
+
+```
+
+
+
 
 ## Formats
 
@@ -94,6 +125,7 @@ curl -i -X GET "https://localhost:5001/WeatherForecast" -H  "Accept: application
 
 # Get requests for other endpoints
 curl -i -X GET "https://localhost:5001/WeatherForecast/3" -H "Accept: application/json;domain=Example.WeatherForecast.Custom;version=1"
+curl -i -X GET "https://localhost:5001/WeatherForecast/3" -H "Accept: application/protobuf;domain=Example.WeatherForecast;version=1"
 curl -i -X GET "https://localhost:5001/WeatherForecast/NoProduces/3" -H "Accept: application/json; domain=Example.WeatherForecast.Custom; version=1, */*;q=0.1"
 curl -i -X GET "https://localhost:5001/WeatherForecast/ProducesType/3" -H "Accept: application/json; domain=Example.WeatherForecast.Custom; version=1"
 

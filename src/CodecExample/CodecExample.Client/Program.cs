@@ -1,8 +1,7 @@
-﻿using CodecExample;
-using CodecExample.Client;
-using CodecExample.Codecs.Custom;
-using CodecExample.Codecs.Serialized;
+﻿using CodecExample.Client;
 using CodecExample.Common;
+using CodecExample.Common.Codecs.Custom;
+using CodecExample.Common.Codecs.Serialized;
 using Flurl.Http;
 
 public class Program
@@ -21,6 +20,37 @@ public class Program
         var transcoder = GetTranscoder();
         var client = new WeatherForecastClient(transcoder);
 
+
+        // -------------------
+        // POST requests
+        // -------------------
+
+        LogHeading("Posting weather forecast - Send CUSTOM V1, Accept CUSTOM V2");
+        var forecastToSend = new WeatherForecast() { Date = DateTime.UtcNow, Summary = "Raining json!", TemperatureC = 25 };
+        LogForecasts(forecastToSend, "Sending Forecast:");
+        var forecastPostReply = await client.PostForecastV1Custom(forecastToSend);
+        LogForecasts(forecastPostReply);
+
+
+        LogHeading("Posting weather forecasts - Send CUSTOM V1, Accept CUSTOM V2");
+        var forecastsToSend = new WeatherForecast[] {
+                                    new WeatherForecast() { Date = DateTime.UtcNow.AddDays(1), Summary = "Raining cats!", TemperatureC = 25 },
+                                    new WeatherForecast() { Date = DateTime.UtcNow.AddDays(2), Summary = "Raining dogs!", TemperatureC = 30 },
+                                    new WeatherForecast() { Date = DateTime.UtcNow.AddDays(3), Summary = "Raining pennies from heaven!", TemperatureC = 35 }
+                                };
+        LogForecasts(forecastsToSend, "Sending Forecasts:");
+        var forecastsPostReply = await client.PostForecastV1Custom(forecastsToSend);
+        LogForecasts(forecastsPostReply);
+
+
+        LogHeading("Posting weather forecast - Send PROTOBUF V1, Accept PROTOBUF V2");
+        var forecastToSendPB = new WeatherForecast() { Date = DateTime.UtcNow.AddDays(4), Summary = "Raining buffers!", TemperatureC = 10 };
+        LogForecasts(forecastToSendPB, "Sending Forecast:");
+        var forecastPostReplyPB = await client.PostForecastV1Protobuf(forecastToSendPB);
+        LogForecasts(forecastPostReplyPB);
+
+
+
         // -------------------
         // GET requests
         // -------------------
@@ -28,6 +58,10 @@ public class Program
         LogHeading("Fetching weather forecasts - CUSTOM V1");
         var forecasts1C = await client.GetForecastsV1Custom();
         LogForecasts(forecasts1C);
+
+        LogHeading("Fetching weather forecasts - CUSTOM V1 (Over 30C)");
+        var forecasts1CHot = await client.GetForecastsV1Custom(30);
+        LogForecasts(forecasts1CHot);
 
 
         LogHeading("Fetching weather forecasts - CUSTOM V2");
@@ -45,26 +79,10 @@ public class Program
         LogForecasts(forecasts);
 
 
-        // -------------------
-        // POST requests
-        // -------------------
+        LogHeading("Fetching weather forecasts - PROTOBUF V1");
+        var forecast1PB = await client.GetForecastV1Protobuf(2);
+        LogForecasts(forecast1PB);
 
-        LogHeading("Posting weather forecast - Send CUSTOM V1, Accept CUSTOM V2");
-        var forecastToSend = new WeatherForecast() { Date = DateTime.Now, Summary = "Raining cats!", TemperatureC = 25 };
-        LogForecasts(forecastToSend, "Sending Forecast:");
-        var forecastPostReply = await client.PostForecastV1Custom(forecastToSend);
-        LogForecasts(forecastPostReply);
-
-
-        LogHeading("Posting weather forecasts - Send CUSTOM V1, Accept CUSTOM V2");
-        var forecastsToSend = new WeatherForecast[] { 
-                                    new WeatherForecast() { Date = DateTime.Now, Summary = "Raining cats!", TemperatureC = 25 },
-                                    new WeatherForecast() { Date = DateTime.Now.AddDays(1), Summary = "Raining dogs!", TemperatureC = 30 },
-                                    new WeatherForecast() { Date = DateTime.Now.AddDays(2), Summary = "Raining pennies from heaven!", TemperatureC = 35 }
-                                };
-        LogForecasts(forecastsToSend, "Sending Forecasts:");
-        var forecastsPostReply = await client.PostForecastV1Custom(forecastsToSend);
-        LogForecasts(forecastsPostReply);
 
 
         // -------------------
@@ -82,6 +100,8 @@ public class Program
         }
 
 
+        Console.WriteLine("Press enter to exit.");
+        Console.ReadLine();
     }
 
     private static void LogHeading(string value)
@@ -90,7 +110,7 @@ public class Program
         Console.WriteLine(value);
     }
 
-    private static void LogForecasts(IEnumerable<CodecExample.WeatherForecast> forecasts, string description = "Received Forecasts:")
+    private static void LogForecasts(IEnumerable<WeatherForecast> forecasts, string description = "Received Forecasts:")
     {
         Console.WriteLine(description);
         foreach (var forecast in forecasts)
@@ -99,7 +119,7 @@ public class Program
         }
     }
 
-    private static void LogForecasts(CodecExample.WeatherForecast forecast, string description = "Received Forecast:")
+    private static void LogForecasts(WeatherForecast forecast, string description = "Received Forecast:")
     {
         Console.WriteLine(description);
         Console.WriteLine($"\t{forecast.Date}  \tTemp: {forecast.TemperatureC} C  \tSummary: {forecast.Summary}.");
@@ -134,6 +154,12 @@ public class Program
         transcoder.Encoders.Add(new WeatherForecastCollectionSerializedV1Encoder());
         transcoder.Decoders.Add(new WeatherForecastSerializedV1Decoder());
         transcoder.Decoders.Add(new WeatherForecastCollectionSerializedV1Decoder());
+
+        // V1 Protobuf Codecs
+        transcoder.Encoders.Add(new CodecExample.Common.Protobuf.Codecs.WeatherForecastV1Encoder());
+        transcoder.Decoders.Add(new CodecExample.Common.Protobuf.Codecs.WeatherForecastV1Decoder());
+        transcoder.Encoders.Add(new CodecExample.Common.Protobuf.Codecs.WeatherForecastCollectionV1Encoder());
+        transcoder.Decoders.Add(new CodecExample.Common.Protobuf.Codecs.WeatherForecastCollectionV1Decoder());
 
         // Other
         transcoder.Encoders.Add(new ValidationProblemsEncoder());

@@ -5,9 +5,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using CodecExample.Codecs.Custom;
-using CodecExample.Codecs.Serialized;
 using CodecExample.Common;
+using CodecExample.Common.Codecs.Custom;
+using CodecExample.Common.Codecs.Serialized;
 using CodecExample.Common.Formatters;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -58,12 +58,31 @@ namespace CodecExample
             transcoder.Decoders.Add(new WeatherForecastSerializedV1Decoder());
             transcoder.Decoders.Add(new WeatherForecastCollectionSerializedV1Decoder());
 
+            // V1 Protobuf Codecs
+            transcoder.Encoders.Add(new CodecExample.Common.Protobuf.Codecs.WeatherForecastV1Encoder());
+            transcoder.Decoders.Add(new CodecExample.Common.Protobuf.Codecs.WeatherForecastV1Decoder());
+            transcoder.Encoders.Add(new CodecExample.Common.Protobuf.Codecs.WeatherForecastCollectionV1Encoder());
+            transcoder.Decoders.Add(new CodecExample.Common.Protobuf.Codecs.WeatherForecastCollectionV1Decoder());
+
+
             // Other
             transcoder.Encoders.Add(new ValidationProblemsEncoder());
 
             services.AddSingleton<Transcoder>(transcoder);
 
-            services.AddSingleton<Repositories.WeatherForecastsRepository>();
+            // Setup the SQLITE data repo
+            services.AddSingleton<CodecExample.Data.Sqlite.WeatherForecastsRepository>(sp => 
+            {
+                var connectionString = Configuration.GetValue<string>("Data:Sqlite:ConnectionString", "Data Source=Data/WeatherForecasts.sqlite");
+
+                // Ensure db and schema created.
+                CodecExample.Data.Sqlite.DBSetup.Setup(connectionString);
+
+                return new Data.Sqlite.WeatherForecastsRepository(
+                                            sp.GetRequiredService<Transcoder>(), 
+                                            connectionString);
+
+            });
 
             services.AddControllers(options =>
             {

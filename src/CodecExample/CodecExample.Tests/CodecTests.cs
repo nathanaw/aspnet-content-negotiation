@@ -5,12 +5,12 @@ using System.Reflection;
 using FluentAssertions;
 using FluentAssertions.Json;
 using CodecExample.Common;
-using CodecExample.Codecs.Custom;
-using CodecExample.Codecs.Serialized;
 using System.Threading.Tasks;
 using Microsoft.Net.Http.Headers;
 using System;
 using System.Collections.Generic;
+using CodecExample.Common.Codecs.Custom;
+using CodecExample.Common.Codecs.Serialized;
 
 namespace CodecExample.Tests
 {

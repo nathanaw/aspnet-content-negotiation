@@ -14,24 +14,24 @@ using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Extensions.Logging;
 using Microsoft.Net.Http.Headers;
 
-namespace CodecExample.Codecs.Serialized
+namespace CodecExample.Common.Codecs.Serialized
 {
     /// <summary>
     /// A <see cref="TextInputFormatter"/> for JSON content that uses <see cref="JsonSerializer"/>.
     /// </summary>
-    public class WeatherForecastSerializedV1Decoder : BaseJsonSerializationDecoder
+    public class WeatherForecastCollectionSerializedV1Decoder : BaseJsonSerializationDecoder
     {
         /// <summary>
-        /// Initializes a new instance of <see cref="WeatherForecastSerializedInputFormatter"/>.
+        /// Initializes a new instance of <see cref="WeatherForecastCollectionSerializedInputFormatter"/>.
         /// </summary>
-        public WeatherForecastSerializedV1Decoder()
+        public WeatherForecastCollectionSerializedV1Decoder()
         {
-            AddSupportedMediaType(WeatherForecastSerializedV1Encoder.WeatherForecastJsonV1MediaType);
+            AddSupportedMediaType(WeatherForecastCollectionSerializedV1Encoder.WeatherForecastCollectionJsonV1MediaType);
         }
 
         public override bool CanReadType(Type type)
         {
-            return type.IsAssignableFrom(typeof(WeatherForecast));
+            return type.IsAssignableFrom(typeof(List<WeatherForecast>));
         }
 
     }

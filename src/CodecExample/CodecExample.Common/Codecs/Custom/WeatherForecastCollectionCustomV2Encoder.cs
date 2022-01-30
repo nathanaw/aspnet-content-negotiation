@@ -13,15 +13,15 @@ using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace CodecExample.Codecs.Custom
+namespace CodecExample.Common.Codecs.Custom
 {
-    public class WeatherForecastCollectionCustomV1Encoder : BaseNewtonsoftJsonEncoder
+    public class WeatherForecastCollectionCustomV2Encoder : BaseNewtonsoftJsonEncoder
     {
-        public const string WeatherForecastCollectionJsonV1MediaType = "application/json; Domain=Example.WeatherForecastCollection.Custom; Version=1";
+        public const string WeatherForecastCollectionJsonV2MediaType = "application/json; Domain=Example.WeatherForecastCollection.Custom; Version=2";
 
-        public WeatherForecastCollectionCustomV1Encoder()
+        public WeatherForecastCollectionCustomV2Encoder()
         {
-            AddSupportedMediaType(WeatherForecastCollectionJsonV1MediaType);
+            AddSupportedMediaType(WeatherForecastCollectionJsonV2MediaType);
         }
 
         protected override bool CanWriteType(Type type)
@@ -37,7 +37,7 @@ namespace CodecExample.Codecs.Custom
             // Use the encoding logic of the singular item encoder.
             // TODO - Fetch the item encoder from transcoder.
             // --------------------------------------------------------------------------------
-            var itemEncoder = new WeatherForecastCustomV1Encoder();
+            var itemEncoder = new WeatherForecastCustomV2Encoder();
 
             JArray jarray = new JArray();
 
@@ -50,8 +50,8 @@ namespace CodecExample.Codecs.Custom
                     // Use the copy constructor of the EncoderContext to do a deep clone.
                     // Then overwrite the Object.
                     // --------------------------------------------------------------------------------
-                    var itemContext = new EncoderContext(encoderContext) 
-                    { 
+                    var itemContext = new EncoderContext(encoderContext)
+                    {
                         Object = forecast,
                         ObjectType = typeof(WeatherForecast),
                     };

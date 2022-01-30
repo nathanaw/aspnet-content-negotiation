@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using CodecExample;
 using CodecExample.Common;
-using CodecExample.Codecs.Custom;
-using CodecExample.Codecs.Serialized;
 using Flurl;
 using Flurl.Http;
 using Microsoft.Net.Http.Headers;
+using CodecExample.Common.Codecs.Custom;
+using CodecExample.Common.Codecs.Serialized;
+using CodecExample.Common.Protobuf.Codecs;
 
 namespace CodecExample.Client
 {
@@ -54,14 +54,25 @@ namespace CodecExample.Client
         /// Accepts: 
         ///     application/json; Domain=Example.WeatherForecastCollection.Custom; Version=1
         /// </summary>
-        public async Task<IEnumerable<WeatherForecast>> GetForecastsV1Custom()
+        public async Task<IEnumerable<WeatherForecast>> GetForecastsV1Custom(int? minTempC = null, int? maxTempC = null)
         {
             // Use Flurl.Http to execute the request.
             // Include the Accept header.
-            var response = await CodecExampleServiceUri
-                                    .AppendPathSegment("WeatherForecast")
-                                    .WithHeader("Accept", WeatherForecastCollectionCustomV1Encoder.WeatherForecastCollectionJsonV1MediaType)
-                                    .GetAsync();
+            var request = CodecExampleServiceUri
+                                .AppendPathSegment("WeatherForecast")
+                                .WithHeader("Accept", WeatherForecastCollectionCustomV1Encoder.WeatherForecastCollectionJsonV1MediaType);
+
+            if (minTempC.HasValue)
+            {
+                request.SetQueryParam("MinTempC", minTempC.Value);
+            }
+
+            if (maxTempC.HasValue)
+            {
+                request.SetQueryParam("MaxTempC", maxTempC.Value);
+            }
+
+            var response = await request.GetAsync();
 
             return await DecodeResponse<IEnumerable<WeatherForecast>>(response);
         }
@@ -72,12 +83,23 @@ namespace CodecExample.Client
         /// Accepts: 
         ///     application/json; Domain=Example.WeatherForecastCollection.Custom; Version=2
         /// </summary>
-        public async Task<IEnumerable<WeatherForecast>> GetForecastsV2Custom()
+        public async Task<IEnumerable<WeatherForecast>> GetForecastsV2Custom(int? minTempC = null, int? maxTempC = null)
         {
-            var response = await CodecExampleServiceUri
-                                    .AppendPathSegment("WeatherForecast")
-                                    .WithHeader("Accept", WeatherForecastCollectionCustomV2Encoder.WeatherForecastCollectionJsonV2MediaType)
-                                    .GetAsync();
+            var request = CodecExampleServiceUri
+                                .AppendPathSegment("WeatherForecast")
+                                .WithHeader("Accept", WeatherForecastCollectionCustomV2Encoder.WeatherForecastCollectionJsonV2MediaType);
+
+            if (minTempC.HasValue)
+            {
+                request.SetQueryParam("MinTempC", minTempC.Value);
+            }
+
+            if (maxTempC.HasValue)
+            {
+                request.SetQueryParam("MaxTempC", maxTempC.Value);
+            }
+
+            var response = await request.GetAsync();
 
             return await DecodeResponse<IEnumerable<WeatherForecast>>(response);
         }
@@ -88,12 +110,23 @@ namespace CodecExample.Client
         /// Accepts: 
         ///     application/json; Domain=Example.WeatherForecastCollection.Serialized; Version=1
         /// </summary>
-        public async Task<IEnumerable<WeatherForecast>> GetForecastsV1Serialized()
+        public async Task<IEnumerable<WeatherForecast>> GetForecastsV1Serialized(int? minTempC = null, int? maxTempC = null)
         {
-            var response = await CodecExampleServiceUri
-                                    .AppendPathSegment("WeatherForecast")
-                                    .WithHeader("Accept", WeatherForecastCollectionSerializedV1Encoder.WeatherForecastCollectionJsonV1MediaType)
-                                    .GetAsync();
+            var request = CodecExampleServiceUri
+                                .AppendPathSegment("WeatherForecast")
+                                .WithHeader("Accept", WeatherForecastCollectionSerializedV1Encoder.WeatherForecastCollectionJsonV1MediaType);
+
+            if (minTempC.HasValue)
+            {
+                request.SetQueryParam("MinTempC", minTempC.Value);
+            }
+
+            if (maxTempC.HasValue)
+            {
+                request.SetQueryParam("MaxTempC", maxTempC.Value);
+            }
+
+            var response = await request.GetAsync();
 
             return await DecodeResponse<IEnumerable<WeatherForecast>>(response);
         }
@@ -110,25 +143,55 @@ namespace CodecExample.Client
         ///     application/json; Domain=Example.WeatherForecastCollection.Custom; Version=2      q=0.500
         ///     application/json; Domain=Example.WeatherForecastCollection.Serialized; Version=1; q=0.100 
         /// </summary>
-        public async Task<IEnumerable<WeatherForecast>> GetForecasts()
+        public async Task<IEnumerable<WeatherForecast>> GetForecasts(int? minTempC = null, int? maxTempC = null)
         {
             // Accept multiple.
             // Includes quality paramters to influence preference for which mediatype to select.
             var acceptedMediaTypes = string.Join(", ",
                                             WeatherForecastCollectionCustomV2Encoder.WeatherForecastCollectionJsonV2MediaType     + "; q=0.900",
                                             WeatherForecastCollectionCustomV1Encoder.WeatherForecastCollectionJsonV1MediaType     + "; q=0.500",
-                                            WeatherForecastCollectionSerializedV1Encoder.WeatherForecastCollectionJsonV1MediaType + "; q=0.100"
+                                            WeatherForecastCollectionSerializedV1Encoder.WeatherForecastCollectionJsonV1MediaType + "; q=0.100",
+                                            WeatherForecastCollectionV1Encoder.MediaType + "; q=0.100"
                                         );
 
-            var response = await CodecExampleServiceUri
-                                    .AppendPathSegment("WeatherForecast")
-                                    .WithHeader("Accept", acceptedMediaTypes)
-                                    .GetAsync();
+            var request = CodecExampleServiceUri
+                                .AppendPathSegment("WeatherForecast")
+                                .WithHeader("Accept", acceptedMediaTypes);
+
+            if (minTempC.HasValue)
+            {
+                request.SetQueryParam("MinTempC", minTempC.Value);
+            }
+
+            if (maxTempC.HasValue)
+            {
+                request.SetQueryParam("MaxTempC", maxTempC.Value);
+            }
+
+            var response = await request.GetAsync();
 
             return await DecodeResponse<IEnumerable<WeatherForecast>>(response);
         }
 
+        /// <summary>
+        /// Get a forecast for the specified number of days from today. 1 == today.
+        /// 
+        /// Accepts: 
+        ///     application/protobuf; Domain=Example.WeatherForecast; Version=1
+        /// </summary>
+        public async Task<WeatherForecast> GetForecastV1Protobuf(int day)
+        {
+            // Use Flurl.Http to execute the request.
+            // Include the Accept header.
+            var request = CodecExampleServiceUri
+                                .AppendPathSegment("WeatherForecast")
+                                .AppendPathSegment(day)
+                                .WithHeader("Accept", WeatherForecastV1Encoder.MediaType);
 
+            var response = await request.GetAsync();
+
+            return await DecodeResponse<WeatherForecast>(response);
+        }
 
         /// <summary>
         /// Post a forecast to the server and receive a response with a forecast.
@@ -183,6 +246,33 @@ namespace CodecExample.Client
 
             // Decode the response.
             return await DecodeResponse<IEnumerable<WeatherForecast>>(response);
+        }
+
+
+        /// <summary>
+        /// Post a forecast to the server and receive a response with a forecast.
+        /// 
+        /// Sends (Content-Type):
+        ///     application/protobuf; Domain=Example.WeatherForecast; Version=1
+        /// 
+        /// Accepts: 
+        ///     application/protobuf; Domain=Example.WeatherForecast; Version=1;
+        /// </summary>
+        public async Task<WeatherForecast> PostForecastV1Protobuf(WeatherForecast forecast)
+        {
+            // Create the HttpContent that will be posted to the server.
+            // This uses the transcoder to encode the resource into a MemoryStream for sending to the server.
+            var httpPostContent = await CreateHttpRequestContent<WeatherForecast>(forecast,
+                                            WeatherForecastV1Encoder.MediaType);
+
+            // POST the request to the server.
+            var response = await CodecExampleServiceUri
+                                    .AppendPathSegments("WeatherForecast")
+                                    .WithHeader("Accept", WeatherForecastV1Encoder.MediaType)
+                                    .PostAsync(httpPostContent);
+
+            // Decode the response.
+            return await DecodeResponse<WeatherForecast>(response);
         }
 
 

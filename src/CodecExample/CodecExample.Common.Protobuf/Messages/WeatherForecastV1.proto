@@ -1,0 +1,16 @@
+﻿syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "CodecExample.Common.Protobuf.Messages";
+
+message WeatherForecastV1 {
+    google.protobuf.Timestamp date = 1;
+    int32 temp_celcius = 2;
+    int32 temp_farenheight = 3;
+    string summary = 4;
+}  
+
+message WeatherForecastCollectionV1 {
+    repeated WeatherForecastV1 forecasts = 1;
+}  

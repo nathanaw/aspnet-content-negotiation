@@ -3,7 +3,7 @@
 
 using System;
 
-namespace CodecExample
+namespace CodecExample.Common
 {
     public class WeatherForecast
     {

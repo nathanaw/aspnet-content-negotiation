@@ -13,7 +13,7 @@ using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace CodecExample.Codecs.Custom
+namespace CodecExample.Common.Codecs.Custom
 {
     public class WeatherForecastCustomV2Encoder : BaseNewtonsoftJsonEncoder
     {

@@ -17,6 +17,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodecExample.Data.Sqlite", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodecExample.Common.Protobuf", "CodecExample.Common.Protobuf\CodecExample.Common.Protobuf.csproj", "{96B82419-B8A6-4656-A8D8-CF6005B4148E}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Assets", "Assets", "{8E1CFDB7-BFF8-4419-A38F-9CB749B3650C}"
+	ProjectSection(SolutionItems) = preProject
+		Readme.md = Readme.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

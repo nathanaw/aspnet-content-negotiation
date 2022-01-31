@@ -8,11 +8,16 @@ via the Accept header. See [Content Negotiation - MDN](https://developer.mozilla
 for a good overview of the concepts.
 
 The examples (below) demonstrate a progression of usage, starting with what is included
-in the ASP.NET Core framework (see ContentNegotiationExample).
+in the ASP.NET Core framework (see ContentNegotiationExample). However the primary
+example is the Codec Example.
+
 
 # Content Negotiation Example
 
 Demonstrates how to use input and output formatters in ASP.NET for content negotiation.
+
+This example is primarly aimed at showing what ASP.NET provides in the framework. However,
+the framework's approach is challenging to use.
 
 See [src/ContentNegotiationExample](src/ContentNegotiationExample) for the solution.
 
@@ -27,8 +32,13 @@ data persistence.
 
 See [src/CodecExample](src/CodecExample) for the solution.
 
-See the [CodecExample Server Readme](src/CodecExample/CodecExample/Readme.md) for details on how to run and test the server endpoints.
+See the [CodecExample Readme](src/CodecExample/Readme.md) for details on how to run and test the server endpoints.
 
 See the [CodecExample Client Readme](src/CodecExample/CodecExample.Client/README.md) for an example of using the transcoder and codecs on the client.
+
+See the [CodecExample Sqlite Data Repository Readme](src/CodecExample/CodecExample.Data.Sqlite/README.md) for an example of using the transcoder and codecs when saving to the database.
+
+See the [CodecExample Protobuf Readme](src/CodecExample/CodecExample.Common.Protobuf/README.md) for protobuf codec examples, which use a binary encoding for compact representations.
+
 
 

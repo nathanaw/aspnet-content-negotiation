@@ -30,15 +30,15 @@ Introduce the concepts of codecs (encoders / decoders) and transcoders. These en
 us to use the formatting and parsing logic anywhere, including in client SDKs and/or
 data persistence.
 
-See [src/CodecExample](src/CodecExample) for the solution.
+See the [CodecExample](src/CodecExample) for details on how to run and test the server endpoints.
 
-See the [CodecExample Readme](src/CodecExample/Readme.md) for details on how to run and test the server endpoints.
+See the [CodecExample Common Library](src/CodecExample/CodecExample.Common) for codecs, base classes, and the transcoder implementations.
 
-See the [CodecExample Client Readme](src/CodecExample/CodecExample.Client/README.md) for an example of using the transcoder and codecs on the client.
+See the [CodecExample Client CLI](src/CodecExample/CodecExample.Client) for an example of using the transcoder and codecs on the client.
 
-See the [CodecExample Sqlite Data Repository Readme](src/CodecExample/CodecExample.Data.Sqlite/README.md) for an example of using the transcoder and codecs when saving to the database.
+See the [CodecExample Sqlite Data Repository](src/CodecExample/CodecExample.Data.Sqlite) for an example of using the transcoder and codecs when saving to the database.
 
-See the [CodecExample Protobuf Readme](src/CodecExample/CodecExample.Common.Protobuf/README.md) for protobuf codec examples, which use a binary encoding for compact representations.
+See the [CodecExample Protobuf Codecs](src/CodecExample/CodecExample.Common.Protobuf) for protobuf codec examples, which use a binary encoding for compact representations.
 
 
 

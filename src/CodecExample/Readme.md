@@ -28,7 +28,8 @@ dotnet run --project CodecExample/CodecExample.csproj
 dotnet run --project CodecExample.Client/CodecExample.Client.csproj
 
 # Get multi-day forecast using Version 1 CUSTOM media type and formatter.
-curl -# -k -i -X GET "https://localhost:5001/WeatherForecast" -H  "Accept: application/json;domain=Example.WeatherForecastCollection.Custom;version=1"
+curl -# -k -i -X GET "https://localhost:5001/WeatherForecast" \
+     -H  "Accept: application/json;domain=Example.WeatherForecastCollection.Custom;version=1"
 
 ```
 

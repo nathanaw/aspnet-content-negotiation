@@ -28,7 +28,7 @@ dotnet run --project CodecExample/CodecExample.csproj
 dotnet run --project CodecExample.Client/CodecExample.Client.csproj
 
 # Get multi-day forecast using Version 1 CUSTOM media type and formatter.
-curl -i -X GET "https://localhost:5001/WeatherForecast" -H  "Accept: application/json;domain=Example.WeatherForecastCollection.Custom;version=1"
+curl -# -k -i -X GET "https://localhost:5001/WeatherForecast" -H  "Accept: application/json;domain=Example.WeatherForecastCollection.Custom;version=1"
 
 ```
 
@@ -99,35 +99,55 @@ an exhaustive list.
 
 ```bash
 # Get multi-day forecast using Version 1 CUSTOM media type and formatter.
-curl -i -X GET "https://localhost:5001/WeatherForecast" -H  "Accept: application/json;domain=Example.WeatherForecastCollection.Custom;version=1"
+curl -# -k -i -X GET "https://localhost:5001/WeatherForecast" \
+     -H  "Accept: application/json; domain=Example.WeatherForecastCollection.Custom; version=1"
 
 # Get multi-day forecast using Version 2 CUSTOM media type and formatter.
-curl -i -X GET "https://localhost:5001/WeatherForecast" -H  "Accept: application/json;domain=Example.WeatherForecastCollection.Custom;version=1"
+curl -# -k -i -X GET "https://localhost:5001/WeatherForecast" \
+     -H  "Accept: application/json; domain=Example.WeatherForecastCollection.Custom; version=2"
 
 # Get multi-day forecast using SERIALIZED media type and formatter.
-curl -i -X GET "https://localhost:5001/WeatherForecast" -H  "Accept: application/json;domain=Example.WeatherForecastCollection.Serialized;version=1"
+curl -# -k -i -X GET "https://localhost:5001/WeatherForecast" \
+     -H  "Accept: application/json; domain=Example.WeatherForecastCollection.Serialized; version=1"
 
 # Get multi-day forecast without an accept header. Server chooses and will return CUSTOM format because it is the first registered formatter
-curl -i -X GET "https://localhost:5001/WeatherForecast"
+curl -# -k -i -X GET "https://localhost:5001/WeatherForecast"
 
 # Trigger an HTTP 406 - Not Acceptable due to an unsupported media type.
-curl -i -X GET "https://localhost:5001/WeatherForecast" -H  "Accept: application/xml"
-curl -i -X GET "https://localhost:5001/WeatherForecast" -H  "Accept: application/json;domain=Example.Foo"
-curl -i -X GET "https://localhost:5001/WeatherForecast" -H  "Accept: application/json;domain=Example.WeatherForecastCollection.Serialized;version=99"
+curl -# -k -i -X GET "https://localhost:5001/WeatherForecast" \
+     -H  "Accept: application/xml"
+
+curl -# -k -i -X GET "https://localhost:5001/WeatherForecast" \
+     -H  "Accept: application/json; domain=Example.Foo"
+
+curl -# -k -i -X GET "https://localhost:5001/WeatherForecast" \
+     -H  "Accept: application/json; domain=Example.WeatherForecastCollection.Serialized; version=99"
 
 # Get multi-day forecast using quality (q) parameters where multiple formatters are supported.
 # The preferred format is the SERIALIZED format.
-curl -i -X GET "https://localhost:5001/WeatherForecast" -H  "Accept: application/json;domain=Example.WeatherForecastCollection.Custom;version=1;q=0.1, application/json;domain=Example.WeatherForecastCollection.Serialized;version=1;q=0.9"
+curl -# -k -i -X GET "https://localhost:5001/WeatherForecast" \
+     -H  "Accept: application/json; domain=Example.WeatherForecastCollection.Custom; version=1; q=0.1" \
+     -H  "Accept: application/json; domain=Example.WeatherForecastCollection.Serialized; version=1; q=0.9"
+	
 
 # Get multi-day forecast using quality (q) parameters where multiple formatters are supported.
 # The preferred format is the CUSTOM format.
-curl -i -X GET "https://localhost:5001/WeatherForecast" -H  "Accept: application/json;domain=Example.WeatherForecastCollection.Custom;version=1;q=0.9, application/json;domain=Example.WeatherForecastCollection.Serialized;version=1;q=0.1"
+curl -# -k -i -X GET "https://localhost:5001/WeatherForecast" \
+     -H  "Accept: application/json; domain=Example.WeatherForecastCollection.Custom; version=1; q=0.9"
+     -H  "Accept: application/json; domain=Example.WeatherForecastCollection.Serialized; version=1; q=0.1"
 
 # Get requests for other endpoints
-curl -i -X GET "https://localhost:5001/WeatherForecast/3" -H "Accept: application/json;domain=Example.WeatherForecast.Custom;version=1"
-curl -i -X GET "https://localhost:5001/WeatherForecast/3" -H "Accept: application/protobuf;domain=Example.WeatherForecast;version=1"
-curl -i -X GET "https://localhost:5001/WeatherForecast/NoProduces/3" -H "Accept: application/json; domain=Example.WeatherForecast.Custom; version=1, */*;q=0.1"
-curl -i -X GET "https://localhost:5001/WeatherForecast/ProducesType/3" -H "Accept: application/json; domain=Example.WeatherForecast.Custom; version=1"
+curl -# -k -i -X GET "https://localhost:5001/WeatherForecast/3" \
+     -H "Accept: application/json; domain=Example.WeatherForecast.Custom; version=1"
+
+curl -# -k -i -X GET "https://localhost:5001/WeatherForecast/3" \
+     -H "Accept: application/protobuf; domain=Example.WeatherForecast; version=1"
+
+curl -# -k -i -X GET "https://localhost:5001/WeatherForecast/NoProduces/3" \
+     -H "Accept: application/json;  domain=Example.WeatherForecast.Custom;  version=1, */*; q=0.1"
+
+curl -# -k -i -X GET "https://localhost:5001/WeatherForecast/ProducesType/3" \
+     -H "Accept: application/json;  domain=Example.WeatherForecast.Custom;  version=1"
 
 ```
 
@@ -135,7 +155,7 @@ curl -i -X GET "https://localhost:5001/WeatherForecast/ProducesType/3" -H "Accep
 
 ```bash
 # POST using the SERIALIZED format, but request the CUSTOM format in the response.
-curl -i -X POST "https://localhost:5001/WeatherForecast/" \
+curl -# -s -k -i -X POST "https://localhost:5001/WeatherForecast/" \
   -H  "Accept: application/json; domain=Example.WeatherForecast.Custom; version=1" \
   -H  "Content-Type: application/json; domain=Example.WeatherForecast.Serialized; version=1" \
   -d "{\"Date\":\"2021-07-21T12:48:13.570Z\", \"TemperatureC\":20, \"Summary\":\"Lovely\" }"
@@ -143,8 +163,9 @@ curl -i -X POST "https://localhost:5001/WeatherForecast/" \
 
 ```bash
 # POST a collection of forecasts.
-curl -i -X POST "https://localhost:5001/WeatherForecast/ConsumesCustomCollection/" \
+curl -# -s -k -i -X POST "https://localhost:5001/WeatherForecast/ConsumesCustomCollection/" \
   -H  "Accept: application/json; domain=Example.WeatherForecastCollection.Custom; version=1" \
-  -H  "Content-Type: application/json; domain=Example.WeatherForecastCollection.Serialized; version=1" \
-  -d "[{\"Date\":\"2021-07-21T12:48:13.570Z\", \"TemperatureC\":20, \"Summary\":\"Lovely\" }, {\"Date\":\"2021-07-22T12:48:13.570Z\", \"TemperatureC\":30, \"Summary\":\"Hot\" }]"
+  -H  "Content-Type: application/json; domain=Example.WeatherForecastCollection.Custom; version=1" \
+  -d "[{\"date\":\"2021-07-21T12:48:13.570Z\", \"temperature\": { \"celcius\":20 }, \"summary\":\"Lovely\" }, \
+       {\"date\":\"2021-07-22T12:48:13.570Z\", \"temperature\": { \"celcius\":30 }, \"summary\":\"Hot\" }]"
 ```
